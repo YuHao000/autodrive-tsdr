@@ -1,0 +1,4 @@
+stop_signs/build/*
+stop_signs/neural2d/build/*
+stop_signs/traffic-sign-detection/build/*
+
