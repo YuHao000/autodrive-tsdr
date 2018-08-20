@@ -2,12 +2,15 @@
 ## Team 2: 
 - Rodrigo Gomez-Palacio
 - Adolfo Portilla
-- Juan Vazquez
+- Juan Vasquez
+- Muhammad Ashfaq
 
 ### MAIN: https://github.com/rgomezp/autodrive-tsdr/blob/master/stop_signs/traffic-sign-detection/src/apps/main.cpp
 
+![Alt text](screencapture.png?raw=true "Title")
+
 # 1st Place Winners at the 2018 Autodrive Challenge at GM Proving Grounds in Yuma AZ in the Stop Sign Challenge Category! (2nd overall)
-### News:
+### Competition News:
 - https://today.tamu.edu/tag/autodrive/
 - https://tees.tamu.edu/news/2018/04/25/texas-am-autodrive-challenge-team-shares-experience-before-showcase/
 - https://tees.tamu.edu/news/2018/05/18/texas-am-engineering-autodrive-challenge-team-takes-second-overall-in-first-competition-milestone/
@@ -69,4 +72,4 @@ If the image is classified as a stop sign, the truthiness, percentage, and dista
 
 
 
-![Alt text](screencapture.png?raw=true "Title")
+
