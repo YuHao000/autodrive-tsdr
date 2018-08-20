@@ -1,9 +1,6 @@
-// Include header
-// #include "SignDetectionROSNode.h"
+// Created By: Rodrigo Gomez-Palacio, Juan Vasquez, Adolfo Portilla, Muhammad Ashfaq
 
 #include <iostream>
-
-// Created By: Adolfo Portillo, Rodrigo Gomez-Palacio, Muhammad Ashfaq and Juan Vasquez
 
 // ROS includes
 #include "ros/ros.h"
@@ -20,7 +17,7 @@
 #include <img_processing/imageProcessing.h>
 #include <img_processing/contour.h>
 
-// Your includes
+// Rodrigo includes
 #include <sstream>
 #include <iostream>
 #include <fstream>
@@ -113,10 +110,6 @@ SignDetectionROSNode::SignDetectionROSNode(int argc, char **argv){
     // ROS setup
     this->stop_detected_pub = n.advertise<std_msgs::Bool>("/sign_detection/stop_sign_detected", 1000);
     this->stop_distance_pub = n.advertise<std_msgs::Float32>("/sign_detection/stop_sign_distance", 1000);
-    //this->yield_detected_pub = n.advertise<std_msgs::Bool>("/sign_detection/yield_sign_detected", 1000);
-    //this->yield_distance_pub = n.advertise<std_msgs::Float32>("/sign_detection/yield_sign_distance", 1000);
-    //this->speed_detected_pub = n.advertise<std_msgs::Bool>("/sign_detection/speed_sign_detected", 1000);
-    //this->speed_distance_pub = n.advertise<std_msgs::Float32>("/sign_detection/speed_sign_distance", 1000);
 
     // Setup image transport
     image_transport::ImageTransport it(n);
@@ -152,8 +145,6 @@ void SignDetectionROSNode::frontCameraCallback(const sensor_msgs::ImageConstPtr&
     }
 
     // resize
-    //resize(this->input_image, this->input_image, cvSize(512, 512));
-    //resize(this->input_image, this->input_image, cvSize(768, 768));
     resize(this->input_image, this->input_image, cvSize(1024, 1024));
 
     // show the input image
@@ -173,8 +164,8 @@ void SignDetectionROSNode::sign_detection_pipeline(Mat &img){
         cout << "[" << this->count << "] "; // << "Starting Pipeline..." << endl;
 
     // 0. reset variables
-	this->filter_vec = {};
-	this->bounding_boxes = {};
+    this->filter_vec = {};
+    this->bounding_boxes = {};
     this->filter_count = 0;	    //0 = red, 1 = yellow, 2 = white
     this->input_image = img;
     //hue_shift(this->input_image);
@@ -213,7 +204,6 @@ void SignDetectionROSNode::sign_detection_pipeline(Mat &img){
             Rect box = boundingRect(contours[j]);
             if(is_symmetric(box) && !is_small(box) && !is_large(box)){
                 this->bounding_boxes.push_back(box);
-                //rectangle(with_contours,box,Scalar(0,255,0), this->BOX_WIDTH);
             }
         }
         
@@ -245,7 +235,6 @@ void SignDetectionROSNode::sign_detection_pipeline(Mat &img){
             merge(vec_channels,hist_equalized_image);
             cvtColor(hist_equalized_image,hist_equalized_image,COLOR_YCrCb2BGR);
  
-            //this->show_single_image("Input To Neural Network", hist_equalized_image);
 
 
             // save image
@@ -285,8 +274,6 @@ void SignDetectionROSNode::sign_detection_pipeline(Mat &img){
                 this->stopPercentage.data = strtof(percentage.c_str(), 0);
                 this->stopDistance.data = (float) (1662.8 * pow(height * 2.0, -1.136));	
 
-                //string fileSuccess = "/home/shared/TAMU_AutoDrive_Year_1/Team_Folders/Sign_Detection/neural_net_data/neural_positive/" + to_string(clock()) + ".jpg";
-                //imwrite(fileSuccess, crop);
             } else{
                 if(this->DEBUG){
                     cout<<"\t\tNOPE: " << percentage << endl;
@@ -297,10 +284,6 @@ void SignDetectionROSNode::sign_detection_pipeline(Mat &img){
                     this->stopPercentage.data = strtof(percentage.c_str(), 0);
                     this->stopDistance.data = -1.0;
                 }
-                //this->stopDetected.data = false;
-                
-                //string fileFalse = "/home/shared/TAMU_AutoDrive_Year_1/Team_Folders/Sign_Detection/neural_net_data/neural_negative/" + to_string(clock()) + ".jpg";
-                //imwrite(fileFalse, crop);
             }
         }
     }
@@ -343,14 +326,10 @@ Mat SignDetectionROSNode::sign_filter(int, void*){
     Mat hsv_image;
     cvtColor(this->input_image, hsv_image, COLOR_BGR2HSV);
 
-    //show_single_image("HSV Filter", hsv_image);
-
     if(this->filter_count == 0){
         //keep red pixels
         Mat lower_red;
         Mat upper_red;
-
-        //inRange(hsv_image, Scalar(0,100,30), Scalar(10,255,255), lower_red);
 
         inRange(hsv_image, Scalar(0,30,30), Scalar(10,255,255), lower_red);     // Juan - changed from 80 to 70
         inRange(hsv_image, Scalar(160,70,30), Scalar(179, 255,255), upper_red);
@@ -358,43 +337,9 @@ Mat SignDetectionROSNode::sign_filter(int, void*){
         Mat red_image;
         addWeighted(lower_red, 1.0, upper_red, 1.0, 0.0, red_image);
 
-        //show_single_image("After Red Filter Weights", red_image);
 
         imageprocessing::filter_image(red_image, this->output_image);
-        //filter_count++;
-    } // else if(this->filter_count == 1){
-    //     //keep yellow pixels
-    //     Mat lower_yellow;
-    //     Mat upper_yellow;
-    //     inRange(hsv_image, Scalar(20,130,100), Scalar(28,255,255), lower_yellow);
-    //     inRange(hsv_image, Scalar(210,100,20), Scalar(229,255,255), upper_yellow);
-    //     output_image = lower_yellow;
-    //     filter_count++;
-    // }else if(this->filter_count==2){
-    //     //keep light yellow pixels
-    //     Mat thresh;
-    //     threshold(input_image, thresh, 150, 255, 0);
-    //
-    //     Mat lower_yellow;
-    //     Mat upper_yellow;
-    //
-    //     cvtColor(thresh, hsv_image, COLOR_BGR2HSV);
-    //     inRange(hsv_image, Scalar(20,100,200), Scalar(30,255,255), lower_yellow);
-    //     inRange(hsv_image, Scalar(56,100,100), Scalar(250,255,255), upper_yellow);
-    //
-    //     Mat yellow_image;
-    //     addWeighted(lower_yellow, 1.0, upper_yellow, 1.0, 0.0, yellow_image);
-    //     imageprocessing::filter_image(yellow_image, output_image);
-    //     filter_count++;
-    // }else if(this->filter_count==3){
-    //     //keep white pixels
-    //     Mat thresh;
-    //     threshold(input_image, thresh, 150, 255, 0);
-    //     cvtColor(thresh, thresh, COLOR_BGR2GRAY);
-    //     imageprocessing::filter_image(thresh, output_image);
-    //
-    //     filter_count++;
-    // }
+    } 
 
     Mat *temp = new Mat(this->output_image);
     return *temp;
@@ -403,44 +348,28 @@ Mat SignDetectionROSNode::sign_filter(int, void*){
 void SignDetectionROSNode::hue_shift(Mat &image){
 	Mat hsv;
 	cvtColor(image, hsv, CV_RGB2HSV);
-	//int width = image.size().width;
-	//int height = image.size().height;
-	//int x = width / 2;
-	//int y = height / 3;
-	
-	//if(point[0] < 10){
-		for(int c=0; c<hsv.cols; c++){
-			for(int r=0; r<hsv.rows; r++){
-				Vec3b &point = hsv.at<Vec3b>(Point(c,r));
-				int value = 0;				
-				if(point[0] < 130){
-					int hue = hsv.at<Vec3b>(Point(c,r))[0];
-					int saturation = hsv.at<Vec3b>(Point(c,r))[1];
-					
-					if(point[0] > 100){
-						//hue -= 290;
-						hue = 120;						
-						value = 255;
-						saturation = 200;
-					
+	for(int c=0; c<hsv.cols; c++){
+		for(int r=0; r<hsv.rows; r++){
+			Vec3b &point = hsv.at<Vec3b>(Point(c,r));
+			int value = 0;				
+			if(point[0] < 130){
+				int hue = hsv.at<Vec3b>(Point(c,r))[0];
+				int saturation = hsv.at<Vec3b>(Point(c,r))[1];
+				
+				if(point[0] > 100){
+					hue = 120;						
+					value = 255;
+					saturation = 200;
+				
 
-					}
-					/*else if(point[0] < 350){
-
-						hue -= 300;
-						value = 255;
-						saturation = 255;
-
-					}*/
-
-					hsv.at<Vec3b>(Point(c,r))[0] = hue;
-					hsv.at<Vec3b>(Point(c,r))[1] = saturation;
 				}
-					//hsv.at<Vec3b>(Point(c,r))[2] = value;
 
-			}		
-		}
-	//}
+				hsv.at<Vec3b>(Point(c,r))[0] = hue;
+				hsv.at<Vec3b>(Point(c,r))[1] = saturation;
+			}
+
+		}		
+	}
 
 	cvtColor(hsv, image, CV_HSV2RGB);
 }
