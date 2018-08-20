@@ -9,7 +9,7 @@
 
 ![Alt text](screencapture.png?raw=true "Title")
 
-# 1st Place Winners at the 2018 Autodrive Challenge at GM Proving Grounds in Yuma AZ in the Stop Sign Challenge Category! (2nd overall)
+# 1st Place Winners in the Stop Sign Challenge Category at the 2018 Autodrive Challenge at GM Proving Grounds in Yuma AZ! (2nd overall)
 ### Competition News:
 - https://today.tamu.edu/tag/autodrive/
 - https://tees.tamu.edu/news/2018/04/25/texas-am-autodrive-challenge-team-shares-experience-before-showcase/
