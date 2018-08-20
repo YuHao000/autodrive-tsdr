@@ -4,6 +4,8 @@
 - Adolfo Portilla
 - Juan Vazquez
 
+### MAIN: https://github.com/rgomezp/autodrive-tsdr/blob/master/stop_signs/traffic-sign-detection/src/apps/main.cpp
+
 # 1st Place Winners at the 2018 Autodrive Challenge at GM Proving Grounds in Yuma AZ in the Stop Sign Challenge Category! (2nd overall)
 ### News:
 - https://today.tamu.edu/tag/autodrive/
