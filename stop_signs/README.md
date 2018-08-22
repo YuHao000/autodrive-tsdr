@@ -18,31 +18,14 @@
 
 " The stop sign challenge required the car to maneuver on a straight three-lane road and successfully detect and stop for a series of stop signs, a challenge in which the team reached a top speed of 20 mph before stopping, the fastest in the competition. "
 
+## Problem
+Be able to detect and recognize stop signs with good accuracy so autonomous vehicle knows when and where to stop
+
+## Solution
+Combination of OpenCV image-processing/machine-vision with neural network
 
 # Sign Detection Pipeline
 main.cpp can be found in **traffic-sign-detection/src/apps/main.cpp**
-
-## RELEVANT VARS
-##### `filter_count`: 
-0 = red, 1 = yellow, 2 = white
-##### `input_image`: 
-original image
-##### `stopDetected`: 
-holds boolean value (is a stop sign, is not a stop sign) to be passed to ROS
-##### `stopDistance`: 
-distance derived from contour width in pixels to be passed to ROS
-##### `stopPercentage`: 
-scale from -1 (not a stop sign) to 1 (definitely a stop sign)
-##### `filter_vec`: 
-the object returned from the sign_filter wrapped to be accepted by the `findContours( )` function
-##### `temp_contours`: 
-a double vector of points to store the detected contours after the red filter is applied
-##### `contours`: 
-stores the polygon point vectors after processing from the `approxPolyDP( )` function
-##### `poly`: 
-point vector that saves the individual points that make a single polygon
-##### `bounding_boxes`: 
-stores the individual `box` objects that frame the polygon at its x and y extremities 
 
 ## FUNCTIONS
 ##### `sign_filter(int, void*)`: 
@@ -69,6 +52,29 @@ The image file is written to the bucket and a new thread is spawned that launche
 
 ##### true classification
 If the image is classified as a stop sign, the truthiness, percentage, and distance data is saved to the ROS message variables to tell car to stop. These variables are then published to ROS and the next frame is processed.
+
+
+## RELEVANT VARS
+##### `filter_count`: 
+0 = red, 1 = yellow, 2 = white
+##### `input_image`: 
+original image
+##### `stopDetected`: 
+holds boolean value (is a stop sign, is not a stop sign) to be passed to ROS
+##### `stopDistance`: 
+distance derived from contour width in pixels to be passed to ROS
+##### `stopPercentage`: 
+scale from -1 (not a stop sign) to 1 (definitely a stop sign)
+##### `filter_vec`: 
+the object returned from the sign_filter wrapped to be accepted by the `findContours( )` function
+##### `temp_contours`: 
+a double vector of points to store the detected contours after the red filter is applied
+##### `contours`: 
+stores the polygon point vectors after processing from the `approxPolyDP( )` function
+##### `poly`: 
+point vector that saves the individual points that make a single polygon
+##### `bounding_boxes`: 
+stores the individual `box` objects that frame the polygon at its x and y extremities 
 
 
 
